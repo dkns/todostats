@@ -16,20 +16,19 @@ if not filename.endswith('.txt'):
 statsfile = open(filename, 'r')
 projects = defaultdict(int)
 pattern = re.compile('@[a-zA-Z0-9]+')
-donecounter = 0
 
 for i in statsfile:
     project_name = pattern.search(i)
     if project_name:
         projects[project_name.group(0)] += 1
-
-    donecounter += 1
+    else:
+        projects["general"] += 1
 
 # print "Week {} {}"
 for i, k in projects.items():
     print "Tasks done for project {} : {}".format(i, k)
 
-print "Tasks done in total: {}".format(donecounter)
+print "Tasks done in total: {}".format(sum(projects.values()))
 print "Good job!"
 
 statsfile.close()
