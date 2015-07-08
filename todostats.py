@@ -16,6 +16,11 @@ if not filename.endswith('.txt'):
 statsfile = open(filename, 'r')
 projects = defaultdict(int)
 pattern = re.compile('@[a-zA-Z0-9]+')
+get_date = re.compile('[0-9-]')
+
+today = datetime.datetime.today()
+last_monday = today - datetime.timedelta(days=-today.weekday(), weeks=1)
+print last_monday.strftime("%Y-%m-%d")
 
 for i in statsfile:
     project_name = pattern.search(i)
