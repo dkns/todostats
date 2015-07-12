@@ -13,7 +13,6 @@ if not filename.endswith('.txt'):
     print "Exiting"
     sys.exit(0)
 
-statsfile = open(filename, 'r')
 projects = defaultdict(int)
 pattern = re.compile('@[a-zA-Z0-9]+')
 start_date = re.compile('[0-9-]')
@@ -38,5 +37,3 @@ for i, k in projects.items():
 print "\n"
 print "Tasks done in total: {}".format(sum(projects.values()))
 print "Good job!"
-
-statsfile.close()
