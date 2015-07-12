@@ -13,18 +13,31 @@ if not filename.endswith('.txt'):
     print "Exiting"
     sys.exit(0)
 
-projects = defaultdict(int)
-pattern = re.compile('@[a-zA-Z0-9]+')
-start_date = re.compile('[0-9-]')
-
 today = datetime.datetime.today()
-last_monday = today - datetime.timedelta(days=-today.weekday(), weeks=1)
-print "Tasks done between"
-print last_monday.strftime("%Y-%m-%d")
-print today.strftime("%Y-%m-%d")
-print "\n"
+last_sunday = today - datetime.timedelta(days=7)
+last_sunday = last_sunday.strftime("%Y-%m-%d")
+today = today.strftime("%Y-%m-%d")
 
-for i in statsfile:
+projects = defaultdict(int)
+start_date = re.compile(last_sunday)
+pattern = re.compile('@[a-zA-Z0-9]+')
+
+found_projects = []
+
+with open(filename) as f:
+    lines = f.readlines()
+    for i in lines:
+        find_start = start_date.search(i)
+        if find_start:
+            # found_projects.append(i)
+            print(find_start.group())
+            break
+
+print found_projects
+
+print "Tasks done between " + last_sunday + " - " + today
+
+for i in found_projects:
     project_name = pattern.search(i)
     if project_name:
         projects[project_name.group(0)] += 1
