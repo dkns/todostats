@@ -8,9 +8,15 @@ Get repo
 
     git clone https://github.com/dkns/todostats.git
 
-Run script pointing it to your done.txt file
+## Usage ##
 
-    python todostats.py ~/todo/done.txt
+To get stats for all tasks done between various projects since last monday and today:
+
+    python todostats.py -f ~/todo/done.txt
+
+To print help run
+
+    python todostats.py -h
 
 ## Neat ideas ##
 
