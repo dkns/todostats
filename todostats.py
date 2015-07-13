@@ -13,12 +13,17 @@ today = datetime.datetime.today()
 # last_monday = today - datetime.timedelta(days=today.weekday()) + datetime.timedelta(weeks=1)
 last_monday = today - datetime.timedelta(days=today.weekday())
 # last_monday = today + datetime.timedelta(days=(today.weekday() - 7) % 7, weeks=-1)
-delta = today - last_monday
-valid_dates = []
 
-for i in range(delta.days + 1):
-    date = last_monday + datetime.timedelta(days=i)
-    valid_dates.append(date.strftime("%Y-%m-%d"))
+def get_valid_dates(start_date, end_date):
+    valid_dates = []
+    delta = end_date - start_date
+    for i in range(delta.days + 1):
+        date = start_date + datetime.timedelta(days=i)
+        valid_dates.append(date.strftime("%Y-%m-%d"))
+
+    return valid_dates
+
+valid_dates = get_valid_dates(end_date, last_monday)
 
 found_projects = []
 for i in args.f:
