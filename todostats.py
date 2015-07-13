@@ -6,7 +6,7 @@ import re
 import sys
 
 parser = argparse.ArgumentParser(description="Print stats for todo.txt")
-parser.add_argument('-filename', help='Location of done.txt file', type=file, required=True)
+parser.add_argument('-f', '-filename', help='Location of done.txt file', type=file, required=True)
 args = parser.parse_args()
 
 today = datetime.datetime.today()
@@ -21,7 +21,7 @@ for i in range(delta.days + 1):
     valid_dates.append(date.strftime("%Y-%m-%d"))
 
 found_projects = []
-for i in args.filename:
+for i in args.f:
     for j in valid_dates:
         pattern = re.compile(j)
         valid_project = pattern.search(i)
