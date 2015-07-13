@@ -1,17 +1,13 @@
 from collections import defaultdict
 from sys import argv # TODO use argparse
+import argparse
 import datetime
 import re
 import sys
 
-# TODO: decide whether to show all stats in total
-# or just for this week
-script, filename = argv
-
-if not filename.endswith('.txt'):
-    print "Please provide valid .txt file\n"
-    print "Exiting"
-    sys.exit(0)
+parser = argparse.ArgumentParser(description="Print stats for todo.txt")
+parser.add_argument('-filename', help='Location of done.txt file', type=file, required=True)
+args = parser.parse_args()
 
 today = datetime.datetime.today()
 # last_monday = today - datetime.timedelta(days=today.weekday()) + datetime.timedelta(weeks=1)
@@ -25,14 +21,12 @@ for i in range(delta.days + 1):
     valid_dates.append(date.strftime("%Y-%m-%d"))
 
 found_projects = []
-with open(filename) as f:
-    lines = f.readlines()
-    for i in lines:
-        for j in valid_dates:
-            pattern = re.compile(j)
-            valid_project = pattern.search(i)
-            if valid_project:
-                found_projects.append(i)
+for i in args.filename:
+    for j in valid_dates:
+        pattern = re.compile(j)
+        valid_project = pattern.search(i)
+        if valid_project:
+            found_projects.append(i)
 
 last_monday = last_monday.strftime("%Y-%m-%d")
 today = today.strftime("%Y-%m-%d")
