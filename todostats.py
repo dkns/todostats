@@ -14,29 +14,32 @@ if not filename.endswith('.txt'):
     sys.exit(0)
 
 today = datetime.datetime.today()
-last_sunday = today - datetime.timedelta(days=7)
-last_sunday = last_sunday.strftime("%Y-%m-%d")
-today = today.strftime("%Y-%m-%d")
+# last_monday = today - datetime.timedelta(days=today.weekday()) + datetime.timedelta(weeks=1)
+last_monday = today - datetime.timedelta(days=today.weekday())
+# last_monday = today + datetime.timedelta(days=(today.weekday() - 7) % 7, weeks=-1)
+delta = today - last_monday
+valid_dates = []
 
-projects = defaultdict(int)
-start_date = re.compile(last_sunday)
-pattern = re.compile('@[a-zA-Z0-9]+')
+for i in range(delta.days + 1):
+    date = last_monday + datetime.timedelta(days=i)
+    valid_dates.append(date.strftime("%Y-%m-%d"))
 
 found_projects = []
-
 with open(filename) as f:
     lines = f.readlines()
     for i in lines:
-        find_start = start_date.search(i)
-        if find_start:
-            # found_projects.append(i)
-            print(find_start.group())
-            break
+        for j in valid_dates:
+            pattern = re.compile(j)
+            valid_project = pattern.search(i)
+            if valid_project:
+                found_projects.append(i)
 
-print found_projects
+last_monday = last_monday.strftime("%Y-%m-%d")
+today = today.strftime("%Y-%m-%d")
+print "Tasks done between " + last_monday + " - " + today
 
-print "Tasks done between " + last_sunday + " - " + today
-
+projects = defaultdict(int)
+pattern = re.compile('@[a-zA-Z0-9]+')
 for i in found_projects:
     project_name = pattern.search(i)
     if project_name:
