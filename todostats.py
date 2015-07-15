@@ -1,9 +1,10 @@
 from collections import defaultdict
-from sys import argv # TODO use argparse
+from time import mktime
 import argparse
 import datetime
 import re
 import sys
+import time
 
 parser = argparse.ArgumentParser(description="Print stats for todo.txt")
 parser.add_argument('-f', '-filename', help='Location of done.txt file', type=file, required=True)
@@ -11,19 +12,20 @@ parser.add_argument('-sd', '-start-date', help="Start date for counting projects
 parser.add_argument('-ed', '-end-date', help="End date for counting projects")
 args = parser.parse_args()
 
+def convert_to_time(input_date):
+    converted_date = time.strptime(input_date, "%Y-%m-%d")
+    converted_date = datetime.datetime.fromtimestamp(mktime(converted_date))
+    return converted_date
+
 if args.ed:
-    end_date = args.ed
+    end_date = convert_to_time(args.ed)
 else:
     end_date = datetime.datetime.today()
 
 if args.sd:
-    start_date = args.ed
+    start_date = convert_to_time(args.sd)
 else:
     start_date = end_date - datetime.timedelta(days=end_date.weekday())
-
-# last_monday = today - datetime.timedelta(days=today.weekday()) + datetime.timedelta(weeks=1)
-last_monday = end_date - datetime.timedelta(days=end_date.weekday())
-# last_monday = today + datetime.timedelta(days=(today.weekday() - 7) % 7, weeks=-1)
 
 def get_valid_dates(start_date, end_date):
     valid_dates = []
@@ -34,7 +36,7 @@ def get_valid_dates(start_date, end_date):
 
     return valid_dates
 
-valid_dates = get_valid_dates(end_date, last_monday)
+valid_dates = get_valid_dates(end_date, start_date)
 
 def get_valid_projects(list_of_days, filename):
     found_projects = []
@@ -57,9 +59,9 @@ def get_valid_projects(list_of_days, filename):
 
 found_projects = get_valid_projects(valid_dates, args.f)
 
-last_monday = last_monday.strftime("%Y-%m-%d")
+start_date = start_date.strftime("%Y-%m-%d")
 today = end_date.strftime("%Y-%m-%d")
-print "Tasks done between " + last_monday + " - " + today
+print "Tasks done between " + start_date + " - " + today
 
 projects = defaultdict(int)
 pattern = re.compile('@[a-zA-Z0-9]+')
