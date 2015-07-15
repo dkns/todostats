@@ -14,6 +14,10 @@ To get stats for all tasks done between various projects since last monday and t
 
     python todostats.py -f ~/todo/done.txt
 
+Get stats from first of january till Valentines day:
+
+    python todostats.py -f ~/todo/done.txt -sd 2015-01-01 -ed 2015-02-14
+
 To print help run
 
     python todostats.py -h
