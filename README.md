@@ -28,10 +28,7 @@ Add it to cronjob and have it mail you summary every sunday at 23:59
 
 ## TODO ##
 
-* Use argparse instead of argv
-* Let user specify dates instead of always using first monday of week
 * Output pretty graphs?
-* More data:
 * Tasks done in total
 * Quarterly/yearly/monthly summary
 * Longest open task
