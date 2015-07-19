@@ -54,18 +54,24 @@ start_date = start_date.strftime("%Y-%m-%d")
 today = end_date.strftime("%Y-%m-%d")
 print "Tasks done between " + start_date + " - " + today
 
-projects = defaultdict(int)
-pattern = re.compile('@[a-zA-Z0-9]+')
-for i in found_projects:
-    project_name = pattern.search(i)
-    if project_name:
-        projects[project_name.group(0)] += 1
-    else:
-        projects["general"] += 1
+def get_completed_tasks(projects_list):
+    projects = defaultdict(int)
+    pattern = re.compile('@[a-zA-Z0-9]+')
+    for i in projects_list:
+        project_name = pattern.search(i)
+        if project_name:
+            projects[project_name.group(0)] += 1
+        else:
+            projects["general"] += 1
 
-for i, k in projects.items():
-    print "{} : {}".format(i, k)
+    return projects
 
-print "\n"
-print "Tasks done in total: {}".format(sum(projects.values()))
-print "Good job!"
+def output_stats(tasks_done):
+    for i, k in tasks_done.items():
+        print "{} : {}".format(i, k)
+    print "\n"
+    print "Tasks done in total: {}".format(sum(tasks_done.values()))
+    print "Good job!"
+
+completed_tasks = get_completed_tasks(found_projects)
+output_stats(completed_tasks)
