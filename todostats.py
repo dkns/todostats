@@ -56,16 +56,19 @@ def get_valid_projects(list_of_days, filename):
 
     return found_projects
 
-if args.ed:
-    end_date = convert_to_time(args.ed)
-else:
-    end_date = datetime.datetime.today()
+def calculate_dates(start_date=None, end_date=None):
+    if end_date:
+        end_date = convert_to_time(end_date)
+    else:
+        end_date = datetime.datetime.today()
+    if start_date:
+        start_date = convert_to_time(start_date)
+    else:
+        start_date = end_date - datetime.timedelta(days=end_date.weekday())
 
-if args.sd:
-    start_date = convert_to_time(args.sd)
-else:
-    start_date = end_date - datetime.timedelta(days=end_date.weekday())
+    return start_date, end_date
 
+start_date, end_date = calculate_dates(args.sd, args.ed)
 valid_dates = get_valid_dates(start_date, end_date)
 found_projects = get_valid_projects(valid_dates, args.f)
 start_date = start_date.strftime("%Y-%m-%d")
