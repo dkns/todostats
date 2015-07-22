@@ -17,15 +17,24 @@ def convert_to_time(input_date):
     converted_date = datetime.datetime.fromtimestamp(mktime(converted_date))
     return converted_date
 
-if args.ed:
-    end_date = convert_to_time(args.ed)
-else:
-    end_date = datetime.datetime.today()
+def get_completed_tasks(projects_list):
+    projects = defaultdict(int)
+    pattern = re.compile('@[a-zA-Z0-9]+')
+    for i in projects_list:
+        project_name = pattern.search(i)
+        if project_name:
+            projects[project_name.group(0)] += 1
+        else:
+            projects["general"] += 1
 
-if args.sd:
-    start_date = convert_to_time(args.sd)
-else:
-    start_date = end_date - datetime.timedelta(days=end_date.weekday())
+    return projects
+
+def output_stats(tasks_done):
+    for i, k in tasks_done.items():
+        print "{} : {}".format(i, k)
+    print "\n"
+    print "Tasks done in total: {}".format(sum(tasks_done.values()))
+    print "Good job!"
 
 def get_valid_dates(start_date, end_date):
     valid_dates = []
@@ -47,31 +56,20 @@ def get_valid_projects(list_of_days, filename):
 
     return found_projects
 
+if args.ed:
+    end_date = convert_to_time(args.ed)
+else:
+    end_date = datetime.datetime.today()
+
+if args.sd:
+    start_date = convert_to_time(args.sd)
+else:
+    start_date = end_date - datetime.timedelta(days=end_date.weekday())
+
 valid_dates = get_valid_dates(start_date, end_date)
 found_projects = get_valid_projects(valid_dates, args.f)
-
 start_date = start_date.strftime("%Y-%m-%d")
 today = end_date.strftime("%Y-%m-%d")
 print "Tasks done between " + start_date + " - " + today
-
-def get_completed_tasks(projects_list):
-    projects = defaultdict(int)
-    pattern = re.compile('@[a-zA-Z0-9]+')
-    for i in projects_list:
-        project_name = pattern.search(i)
-        if project_name:
-            projects[project_name.group(0)] += 1
-        else:
-            projects["general"] += 1
-
-    return projects
-
-def output_stats(tasks_done):
-    for i, k in tasks_done.items():
-        print "{} : {}".format(i, k)
-    print "\n"
-    print "Tasks done in total: {}".format(sum(tasks_done.values()))
-    print "Good job!"
-
 completed_tasks = get_completed_tasks(found_projects)
 output_stats(completed_tasks)
