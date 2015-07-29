@@ -68,9 +68,10 @@ def calculate_dates(start_date=None, end_date=None):
 
     return start_date, end_date
 
-start_date, end_date = calculate_dates(args.sd, args.ed)
-valid_dates = get_valid_dates(start_date, end_date)
-found_projects = get_valid_projects(valid_dates, args.f)
-print "Tasks done between " + start_date.strftime("%Y-%m-%d") + " - " + end_date.strftime("%Y-%m-%d")
-completed_tasks = get_completed_tasks(found_projects)
-output_stats(completed_tasks)
+if __name__ == '__main__':
+    start_date, end_date = calculate_dates(args.sd, args.ed)
+    valid_dates = get_valid_dates(start_date, end_date)
+    found_projects = get_valid_projects(valid_dates, args.f)
+    print "Tasks done between " + start_date.strftime("%Y-%m-%d") + " - " + end_date.strftime("%Y-%m-%d")
+    completed_tasks = get_completed_tasks(found_projects)
+    output_stats(completed_tasks)
